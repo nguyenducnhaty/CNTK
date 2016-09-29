@@ -1,12 +1,8 @@
 #!/bin/bash
 
-. $TEST_DIR/../../run-test-common	# this will download all data sets necessary for testing 
+. $TEST_ROOT_DIR/run-test-common
 
-export MKL_NUM_THREADS=4
-export MKL_CBWR=COMPATIBLE
-export OMP_NUM_THREADS=1
-
-ConfigDir=$TEST_DIR/../../../../../../Examples/Image/GettingStarted
+ConfigDir=$TEST_DIR/
 
 if [[ ! -d $TEST_DATA_DIR || ! -e $TEST_DATA_DIR/Train-28x28_cntk_text.txt || ! -e $TEST_DATA_DIR/Test-28x28_cntk_text.txt ]]; then
     # Cannot find test data locally.
@@ -28,4 +24,5 @@ if [[ ! -d $TEST_DATA_DIR || ! -e $TEST_DATA_DIR/Train-28x28_cntk_text.txt || ! 
         exit 1
     fi
 fi
+
 
