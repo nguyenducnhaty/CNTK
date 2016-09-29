@@ -7,13 +7,19 @@ cd cntk\tests
 echo RUNNING cntk unit tests...
 pytest --deviceid gpu
 echo(
-cd ..\..\..
+cd ..\..
 
 cd cntk\ops\tests
 echo RUNNING cntk\ops unit tests...
 pytest
 echo(
 cd ..\..\..
+
+cd examples\test
+echo RUNNING cntk\examples\test tests
+pytest
+echo(
+cd ..\..
 
 cd examples\CifarResNet
 echo RUNNING Cifar ResNet example...

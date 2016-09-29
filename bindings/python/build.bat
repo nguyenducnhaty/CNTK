@@ -19,7 +19,7 @@ cd cntk\tests
 echo RUNNING cntk unit tests...
 pytest --deviceid gpu
 echo(
-cd ..\..\..
+cd ..\..
 
 cd cntk\ops\tests
 echo RUNNING cntk\ops unit tests...
