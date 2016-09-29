@@ -1,12 +1,8 @@
-# 06_RegressionSimple.cntk shows how to train a regression model on image data.
+# RegrSimple_CIFAR10.cntk shows how to train a regression model on CIFAR-10 image data.
 # It uses a very simple network and a composite reader using both the ImageReader
 # and CNTKTextFormatReader and defines the RMSE (root mean square error) as the
 # loss function. The value that the network learns to predict are simply the
 # average rgb values of an image normalized to [0, 1].
-# The network consists simply of two linear layers, i.e. two fully connected layers
-# with no non-linear activation function, simply LinearLayer{...} (v) = W * v + b
-# See https://github.com/Microsoft/CNTK/wiki/Layers-Reference for details on CNTK layers.
-# See README.md for instructions on how to generate data and regression labels for this example.
 
 command = TrainConvNet:Write:Test
 
