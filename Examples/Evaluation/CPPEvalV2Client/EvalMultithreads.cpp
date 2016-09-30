@@ -340,6 +340,17 @@ void RunEvaluationOneHidden(FunctionPtr evalFunc, const DeviceDescriptor& device
     outputFunctionInfo(evalFunc);
 
     fprintf(stderr, "device=%d\n", device.Id());
+
+    /*
+Function: Input Variables(count = 3)
+    name = features, kind = 0
+    name = labels, kind = 0
+    name = labels, kind = 0
+Function : Output Variables(count = 3)
+           name = ce_output, kind = 1
+           name = errs_output, kind = 1
+           name = out.z_output, kind = 1
+           */
 }
 
 void MultiThreadsEvaluation()
