@@ -7,8 +7,10 @@ ConfigDir=$TEST_DIR/$OriginalTestDir
 
 echo $TEST_DIR/$OriginalTestDir
 echo "Cha test"
+ls -al $TEST_DIR/$OriginalTestDir
 md5sum $TEST_DIR/$OriginalTestDir/baseline*
 echo $TEST_DIR
+ls -al $TEST_DIR/
 md5sum $TEST_DIR/baseline*
 (cd $TEST_DIR/$OriginalTestDir && md5sum baseline*) | (cd $TEST_DIR && md5sum --status -c -)
 if [ $? != 0 ]; then
