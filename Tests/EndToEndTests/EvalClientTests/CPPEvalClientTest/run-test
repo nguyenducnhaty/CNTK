@@ -25,7 +25,7 @@ ImageDir=$TEST_ROOT_DIR/../../Examples/Image
 MnistDir=$ImageDir/DataSets/MNIST
 DataDir=$MnistDir
 ConfigDir=$MnistDir/../../GettingStarted
-OutputDir=$MnistDir/Output
+OutputDir=$ConfigDir/Output
 
 cp $TestDataDir/Image/MNIST/v0/Train-28x28_cntk_text.txt $DataDir || exit $?
 

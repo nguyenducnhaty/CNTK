@@ -23,7 +23,7 @@ if [ "$OS" == "Windows_NT" ]; then
   MnistDir=$ImageDir/DataSets/MNIST
   DataDir=$MnistDir
   ConfigDir=$MnistDir/../../GettingStarted
-  OutputDir=$MnistDir/Output
+  OutputDir=$ConfigDir/Output
   ResnetModelDir=$ImageDir/Classification/ResNet
 
   cp $TestDataDir/Image/MNIST/v0/Train-28x28_cntk_text.txt $DataDir || exit $?
