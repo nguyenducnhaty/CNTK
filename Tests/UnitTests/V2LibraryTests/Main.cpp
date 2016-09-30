@@ -28,7 +28,7 @@ int main()
     // which will have a silent performance degradation otherwise
     Internal::DisableAutomaticUnpackingOfPackedValues();
 
-    NDArrayViewTests();
+    /*NDArrayViewTests();
     TensorTests();
     FunctionTests();
 
@@ -40,7 +40,7 @@ int main()
     TrainLSTMSequenceClassifer();
 
     TrainSequenceToSequenceTranslator();
-    TrainTruncatedLSTMAcousticModelClassifer();
+    TrainTruncatedLSTMAcousticModelClassifer();*/
 
     MultiThreadsEvaluation();
 
