@@ -5,6 +5,11 @@
 OriginalTestDir=../../../DNN/WriteCommand
 ConfigDir=$TEST_DIR/$OriginalTestDir
 
+echo $TEST_DIR/$OriginalTestDir
+echo "Cha test"
+md5sum $TEST_DIR/$OriginalTestDir/baseline*
+echo $TEST_DIR
+md5sum $TEST_DIR/baseline*
 (cd $TEST_DIR/$OriginalTestDir && md5sum baseline*) | (cd $TEST_DIR && md5sum --status -c -)
 if [ $? != 0 ]; then
   echo Error: Baselines must match original test. Copy from $OriginalTestDir.
