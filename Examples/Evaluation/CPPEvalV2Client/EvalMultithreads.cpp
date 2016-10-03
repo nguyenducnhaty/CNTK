@@ -289,22 +289,43 @@ void outputFunctionInfo(FunctionPtr func)
     for_each(outputVariables.begin(), outputVariables.end(), [](const Variable v) {
         fprintf(stderr, "    name=%S, kind=%d\n", v.Name().c_str(), v.Kind());
     });
-
 }
+
+bool GetVariableByName(std::vector<Variable> variableLists, std::wstring varName, Variable& var)
+{
+    for (std::vector<Variable>::iterator it = variableLists.begin(); it != variableLists.end(); ++it)
+    {
+        if (it->Name().compare(varName) == 0)
+        {
+            var = *it;
+            return true;
+        }
+    }
+    return false;
+}
+
+inline bool GetInputVariableByName(FunctionPtr evalFunc, std::wstring varName, Variable& var)
+{
+    return GetVariableByName(evalFunc->Arguments(), varName, var);
+}
+
+inline bool GetOutputVaraiableByName(FunctionPtr evalFunc, std::wstring varName, Variable& var)
+{
+    return GetVariableByName(evalFunc->Outputs(), varName, var);
+}
+
 void RunEvaluationClassifier(FunctionPtr evalFunc, const DeviceDescriptor& device)
 {
+    const std::wstring inputNodeName = L"features";
     auto inputVariables = evalFunc->Arguments();
 
     outputFunctionInfo(evalFunc);
 
     Variable inputVar;
-    for (std::vector<Variable>::iterator it = inputVariables.begin(); it != inputVariables.end(); ++it)
+    if (!GetInputVariableByName(evalFunc, inputNodeName, inputVar))
     {
-        if (it->Name().compare(L"features") == 0)
-        {
-            assert(it->Shape().Rank() == 1);
-            inputVar = *it;
-        }
+        fprintf(stderr, "No input variable %S is available.\n", inputNodeName.c_str());
+        return;
     }
 
     // Evaluate the network in several runs 
@@ -324,7 +345,7 @@ void RunEvaluationClassifier(FunctionPtr evalFunc, const DeviceDescriptor& devic
         NDShape inputShape = {inputDim, 1, numSamples};
         ValuePtr inputValue = MakeSharedObject<Value>(MakeSharedObject<NDArrayView>(inputShape, inputData.data(), inputData.size(), DeviceDescriptor::CPUDevice(), true));
 
-        ValuePtr outputValue, predictionErrorValue;
+        ValuePtr outputValue;
         // Assuming only one output
         // Todo: allow application to retrieve output nodes
         std::unordered_map<Variable, ValuePtr> outputs = {{evalFunc->Output(), outputValue}};
@@ -333,13 +354,60 @@ void RunEvaluationClassifier(FunctionPtr evalFunc, const DeviceDescriptor& devic
 }
 
 
+
 void RunEvaluationOneHidden(FunctionPtr evalFunc, const DeviceDescriptor& device)
 {
     auto inputVariables = evalFunc->Arguments();
+    const std::wstring inputNodeName = L"features";
+    const std::wstring outputNodeName = L"out.z";
+    const std::wstring errNodeName = L"errs";
 
     outputFunctionInfo(evalFunc);
 
     fprintf(stderr, "device=%d\n", device.Id());
+
+    Variable inputVar;
+    if (!GetInputVariableByName(evalFunc, inputNodeName, inputVar))
+    {
+        fprintf(stderr, "No input variable %S is available.\n", inputNodeName.c_str());
+        return;
+    }
+
+    Variable outputVar;
+    if (!GetOutputVaraiableByName(evalFunc, outputNodeName, outputVar))
+    {
+        fprintf(stderr, "No output variable %S is available.\n", inputNodeName.c_str());
+        return;
+    }
+
+    Variable errVar;
+    if (!GetOutputVaraiableByName(evalFunc, errNodeName, errVar))
+    {
+        fprintf(stderr, "No error variable %S is available.\n", inputNodeName.c_str());
+        return;
+    }
+
+    // Evaluate the network in several runs 
+    size_t iterationCount = 4;
+    unsigned int randSeed = 2;
+    srand(randSeed);
+    size_t numSamples = 3;
+    auto inputDim = inputVar.Shape()[0];
+    for (size_t t = 0; t < iterationCount; ++t)
+    {
+        std::vector<float> inputData(inputDim * numSamples);
+        for (size_t i = 0; i < inputData.size(); ++i)
+        {
+            inputData[i] = static_cast<float>(i % 255);
+        }
+
+        NDShape inputShape = {inputDim, 1, numSamples};
+        ValuePtr inputValue = MakeSharedObject<Value>(MakeSharedObject<NDArrayView>(inputShape, inputData.data(), inputData.size(), DeviceDescriptor::CPUDevice(), true));
+
+        ValuePtr outputValue, errValue;        
+        std::unordered_map<Variable, ValuePtr> outputs = {{outputVar, outputValue}, {errVar, errValue}};
+        evalFunc->Forward({{inputVar, inputValue}}, outputs, device);
+    }
 
     /*
 Function: Input Variables(count = 3)
