@@ -26,12 +26,11 @@ trainNetwork = {
         model = Sequential (
             Scale {featScale} :
             ConvolutionalLayer {16, (5:5), pad = true} : ReLU : 
-            MaxPoolingLayer    {(2:2), stride=(2:2)} :
-            Dropout : 
-            DenseLayer {64} : ReLU : 
-            LinearLayer {labelDim}
+            MaxPoolingLayer    {(2:2), stride=(2:2)} : Dropout : 
+            DenseLayer         {64} : ReLU : 
+            LinearLayer        {labelDim}
         )
-        
+
         # inputs
         features = Input {imageShape}
         labels = Input (labelDim)

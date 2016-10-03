@@ -22,10 +22,10 @@ trainNetwork = {
         
         model = Sequential (
             Scale {featScale} :
-            DenseLayer         {768, init="gaussian", initValueScale=1.5} : Dropout: ReLU : 
-            DenseLayer         {512, init="gaussian", initValueScale=1.5} : Dropout: ReLU : 
-            DenseLayer         {256, init="gaussian", initValueScale=1.5} : Dropout: ReLU :  
-            LinearLayer        {labelDim}
+            DenseLayer  {768, init="gaussian", initValueScale=1.5} : Dropout: ReLU : 
+            DenseLayer  {512, init="gaussian", initValueScale=1.5} : Dropout: ReLU : 
+            DenseLayer  {256, init="gaussian", initValueScale=1.5} : Dropout: ReLU :  
+            LinearLayer {labelDim}
         )
 
         # inputs
@@ -33,18 +33,18 @@ trainNetwork = {
         labels = Input {labelDim}
 
         # apply model to features
-        ol = model (features)
+        z = model (features)
 
         # loss and error computation
-        ce   = CrossEntropyWithSoftmax (labels, ol)
-        errs = ClassificationError (labels, ol)
+        ce   = CrossEntropyWithSoftmax (labels, z)
+        errs = ClassificationError (labels, z)
 
         # declare special nodes
         featureNodes    = (features)
         labelNodes      = (labels)
         criterionNodes  = (ce)
         evaluationNodes = (errs)
-        outputNodes     = (ol)
+        outputNodes     = (z)
     }
 
     SGD = {

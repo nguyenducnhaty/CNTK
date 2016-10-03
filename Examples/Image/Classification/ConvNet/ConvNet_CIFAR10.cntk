@@ -19,7 +19,7 @@ TrainConvNet = {
 
 		featMean = 128
         featScale = 1/256
-        Normalize{m,f} = x => Constant(f) .* (x - Constant(m))
+        Normalize{m,f} = x => f .* (x - m)
 
         model = Sequential (
             Normalize {featMean, featScale} :
@@ -70,7 +70,7 @@ TrainConvNet = {
         readerType = "CNTKTextFormatReader"
         file = "$DataDir$/Train_cntk_text.txt"
 		randomize = true
-		keepDataInMemory = true
+		keepDataInMemory = true     # cache all data in memory 	 
         input = {
             features = { dim = 3072 ; format = "dense" }
             labels   = { dim = 10 ;   format = "dense" }

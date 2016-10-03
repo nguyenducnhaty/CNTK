@@ -33,21 +33,21 @@ trainNetwork = {
         
         # inputs
         features = Input {imageShape}
-        labels = Input (labelDim)
+        labels = Input {labelDim}
 
         # apply model to features
-        ol = model (features)
+        z = model (features)
 
         # loss and error computation
-        sqerr = SquareError (labels, ol)
-        rmse = Sqrt (Constant(1/labelDim).* sqerr)
+        sqErr = SquareError (labels, z)
+        rmse = Sqrt (sqErr / labelDim)
 
         # declare special nodes
         featureNodes    = (features)
         labelNodes      = (labels)
         criterionNodes  = (rmse)
         evaluationNodes = (rmse)
-        outputNodes     = (ol)
+        outputNodes     = (z)
     }
 
     SGD = {

@@ -7,19 +7,14 @@ The CIFAR-10 dataset consists of 60,000 32x32 color images in 10 classes, with 6
 The CIFAR-10 dataset is not included in the CNTK distribution but can be easily downloaded and converted to CNTK-supported format by running the following Python command:
 
 ```
-python CifarDownload.py [-f <format: cudnn|legacy>]
-```
-The download script has an optional `-f` parameter which specifies output format of the datasets. `cudnn` option (default) saves dataset in a spatial-major format used by cuDNN, while `legacy` option saves in CNTK legacy format. Use `cudnn` if CNTK is compiled with cuDNN and `legacy` otherwise. We strongly recommend the users to use the default `cudnn` option.
-
-After running `CifarDownload.py`, you will see the original CIFAR-10 data are copied in a folder named `cifar-10-batches-py`. Meanwhile, two text files `Train_cntk_text.txt` and `Test_cntk_text.txt` are created in the current folder. These text files can be read directly by CNTK.
-
-If you are interested in experimenting with CNTK's `ImageReader`, you shall further convert the CIFAR-10 dataset with the following command:
-
-```
-python CifarConverter.py <path to CIFAR-10 dataset>
+python install_cifar10.py
 ```
 
-Here `<path to CIFAR-10 dataset>` can be simply `cifar-10-batches-py`. The script will create a `train` and a `test` folder that store train and test images in png format. It will also create appropriate mapping files (`train_map.txt` and `test_map.txt`) for the CNTK `ImageReader` as well as mean file `CIFAR-10_mean.xml`.
+After running `install_cifar10.py`, you will see the original CIFAR-10 data are copied in a folder named `cifar-10-batches-py`. Meanwhile, two text files `Train_cntk_text.txt` and `Test_cntk_text.txt` are created in the current folder. These text files can be read directly by CNTK.
+
+In addition, the script will create a `train` and a `test` folder that store train and test images in png format. It will also create appropriate mapping files (`train_map.txt` and `test_map.txt`) for the CNTK `ImageReader` as well as mean file `CIFAR-10_mean.xml`.
+
+The total amount of disk space required for both the text version and the png version for CIFAR-10 is around `950`MB. 
 
 We provide multiple examples in the [Classification](../../Classification) folder to train classifiers for CIFAR-10 with CNTK. Please refer there for more details.
 

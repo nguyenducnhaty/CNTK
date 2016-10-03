@@ -45,7 +45,7 @@ trainNetwork = {
         
         # inputs
         features = Input {imageShape}
-        labels = Input (labelDim)
+        labels = Input {labelDim}
 
         # apply model to features
         ol = model (features)
