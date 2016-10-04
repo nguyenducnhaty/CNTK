@@ -46,7 +46,7 @@ There are five cntk configuration files in the current folder. These cntk config
 
 ### 01_OneHidden.cntk
 
-This is a simple, one hidden layer network that produces `1.56%` of error. Since this model does not assume any spatial relationships between the pixels, it is often referred as "permutation invariant". Surprisingly, the accuracy of such a simple model is better than most permutation invariant neural network implementations in early days that are trained on the raw data (without distortion-based data augmentation), according to http://yann.lecun.com/exdb/mnist/.
+This is a simple, one hidden layer network that produces `1.76%` of error. Since this model does not assume any spatial relationships between the pixels, it is often referred as "permutation invariant". 
 
 To run this example, use the following command:
 
@@ -100,4 +100,4 @@ In the fifth example, we show how CNTK can be used to perform a regression task.
 
 `cntk configFile=05_OneConvRegr.cntk`
 
- The trained network achieves root-mean-square error (RMSE) of 0.0039. To see more sophisticated examples on regression tasks, please refer to [Regression](../Regression). 
+ The trained network achieves root-mean-square error (RMSE) of 0.0039. To see more sophisticated examples on regression tasks, please refer to [Regression](../Regression).

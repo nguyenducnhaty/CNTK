@@ -148,7 +148,7 @@ namespace Microsoft.MSR.CNTK.Extensibility.Managed.CSEvalClient
                 using (var model = new IEvaluateModelManagedF())
                 {
                     // Load model
-                    string modelFilePath = Path.Combine(Environment.CurrentDirectory, @"..\Output\Models\01_OneHidden");
+                    string modelFilePath = Path.Combine(Environment.CurrentDirectory, @".\Output\Models\01_OneHidden");
                     ThrowIfFileNotExist(modelFilePath, 
                         string.Format("Error: The model '{0}' does not exist. Please follow instructions in README.md in <CNTK>/Examples/Image/GettingStarted to create the model.", modelFilePath));
 
@@ -200,7 +200,7 @@ namespace Microsoft.MSR.CNTK.Extensibility.Managed.CSEvalClient
                     const string outputLayerName = "out.z";
 
                     // Load model
-                    string modelFilePath = Path.Combine(Environment.CurrentDirectory, @"..\Output\Models\01_OneHidden");
+                    string modelFilePath = Path.Combine(Environment.CurrentDirectory, @".\Output\Models\01_OneHidden");
                     ThrowIfFileNotExist(modelFilePath,
                         string.Format("Error: The model '{0}' does not exist. Please follow instructions in README.md in <CNTK>/Examples/Image/GettingStarted to create the model.", modelFilePath));
 
@@ -398,14 +398,14 @@ namespace Microsoft.MSR.CNTK.Extensibility.Managed.CSEvalClient
             Environment.CurrentDirectory = Path.Combine(initialDirectory, @"..\..\Examples\Image\GettingStarted");
 
             // Load model
-            string modelFilePath = Path.Combine(Environment.CurrentDirectory, @"..\Output\Models\02_Convolution");
+            string modelFilePath = Path.Combine(Environment.CurrentDirectory, @".\Output\Models\02_OneConv");
             ThrowIfFileNotExist(modelFilePath, 
                 string.Format("Error: The model '{0}' does not exist. Please follow instructions in README.md in <CNTK>/Examples/Image/GettingStarted to create the model.", modelFilePath));
 
             // Initializes the model instances
             ModelEvaluator.Initialize(numConcurrentModels, modelFilePath);
 
-            string testfile = Path.Combine(Environment.CurrentDirectory, @"Test-28x28_cntk_text.txt");
+            string testfile = Path.Combine(Environment.CurrentDirectory, @"..\DataSets\MNIST\Test-28x28_cntk_text.txt");
             ThrowIfFileNotExist(testfile, 
                 string.Format("Error: The test file '{0}' does not exist. Please follow instructions in README.md in <CNTK>/Examples/Image/GettingStarted to download the data.", testfile));
 

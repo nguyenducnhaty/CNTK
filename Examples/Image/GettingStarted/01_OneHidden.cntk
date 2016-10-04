@@ -21,31 +21,61 @@ trainNetwork = {
         imageShape = 28:28:1                        # image dimensions, 1 channel only
         labelDim = 10                               # number of distinct labels
         featScale = 1/256
-        Scale{f} = x => Constant(f) .* x
-        
-        model = Sequential (
-            Scale {featScale} :
-            DenseLayer {200} : ReLU : 
-            LinearLayer {labelDim}
-        )
+
+        # This model returns multiple nodes as a record, which
+        # can be accessed using .x syntax.
+        model(x) = {
+            s1 = x * featScale
+            h1 = DenseLayer {200, activation=ReLU} (s1) 
+            z = LinearLayer {labelDim} (h1)
+        }
         
         # inputs
         features = Input {imageShape}
-        labels = Input (labelDim)
+        labels = Input {labelDim}
 
         # apply model to features
-        ol = model (features)
+        out = model (features)
 
         # loss and error computation
-        ce   = CrossEntropyWithSoftmax (labels, ol)
-        errs = ClassificationError (labels, ol)
+        ce   = CrossEntropyWithSoftmax (labels, out.z)
+        errs = ClassificationError (labels, out.z)
 
         # declare special nodes
         featureNodes    = (features)
         labelNodes      = (labels)
         criterionNodes  = (ce)
         evaluationNodes = (errs)
-        outputNodes     = (ol)
+        outputNodes     = (out.z)
+        
+        # Alternative, you can use the Sequential keyword and write the model 
+        # as follows. We keep the previous format because EvalClientTest needs 
+        # to access the internal nodes, which is not doable yet with Sequential 
+        #
+        # Scale{f} = x => Constant(f) .* x
+        # model = Sequential (
+            # Scale {featScale} :
+            # DenseLayer {200} : ReLU : 
+            # LinearLayer {labelDim}
+        # )
+
+        # # inputs
+        # features = Input {imageShape}
+        # labels = Input (labelDim)
+
+        # # apply model to features
+        # ol = model (features)
+
+        # # loss and error computation
+        # ce   = CrossEntropyWithSoftmax (labels, ol)
+        # errs = ClassificationError (labels, ol)
+
+        # # declare special nodes
+        # featureNodes    = (features)
+        # labelNodes      = (labels)
+        # criterionNodes  = (ce)
+        # evaluationNodes = (errs)
+        # outputNodes     = (ol)
     }
 
     SGD = {
