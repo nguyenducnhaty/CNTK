@@ -346,14 +346,26 @@ void RunEvaluationClassifier(FunctionPtr evalFunc, const DeviceDescriptor& devic
         ValuePtr inputValue = MakeSharedObject<Value>(MakeSharedObject<NDArrayView>(inputShape, inputData.data(), inputData.size(), DeviceDescriptor::CPUDevice(), true));
 
         ValuePtr outputValue;
+        auto outputVar = evalFunc->Output();
         // Assuming only one output
         // Todo: allow application to retrieve output nodes
-        std::unordered_map<Variable, ValuePtr> outputs = {{evalFunc->Output(), outputValue}};
+        std::unordered_map<Variable, ValuePtr> outputs = {{outputVar, outputValue}};
         evalFunc->Forward({{inputVar, inputValue}}, outputs, device);
+
+        outputValue = outputs[outputVar];
+        NDShape outputShape = outputVar.Shape().AppendShape({1, numSamples});
+        std::vector<float> outputData(outputShape.TotalSize());
+        NDArrayViewPtr cpuArrayOutput = MakeSharedObject<NDArrayView>(outputShape, outputData.data(), outputData.size(), DeviceDescriptor::CPUDevice(), false);
+        cpuArrayOutput->CopyFrom(*outputValue->Data());
+
+        fprintf(stderr, "Evaluation result:\n");
+        for (size_t i = 0; i < outputData.size(); i++)
+        {
+            fprintf(stderr, "Sample %lu, Output=%f\n", i, outputData[i]);
+        }
+
     }
 }
-
-
 
 void RunEvaluationOneHidden(FunctionPtr evalFunc, const DeviceDescriptor& device)
 {
@@ -404,9 +416,27 @@ void RunEvaluationOneHidden(FunctionPtr evalFunc, const DeviceDescriptor& device
         NDShape inputShape = {inputDim, 1, numSamples};
         ValuePtr inputValue = MakeSharedObject<Value>(MakeSharedObject<NDArrayView>(inputShape, inputData.data(), inputData.size(), DeviceDescriptor::CPUDevice(), true));
 
-        ValuePtr outputValue, errValue;        
+        ValuePtr outputValue, errValue;
         std::unordered_map<Variable, ValuePtr> outputs = {{outputVar, outputValue}, {errVar, errValue}};
         evalFunc->Forward({{inputVar, inputValue}}, outputs, device);
+
+        outputValue = outputs[outputVar];
+        NDShape outputShape = outputVar.Shape().AppendShape({1, numSamples});
+        std::vector<float> outputData(outputShape.TotalSize());
+        NDArrayViewPtr cpuArrayOutput = MakeSharedObject<NDArrayView>(outputShape, outputData.data(), outputData.size(), DeviceDescriptor::CPUDevice(), false);
+        cpuArrayOutput->CopyFrom(*outputValue->Data());
+
+        errValue = outputs[errVar];
+        NDShape errShape = errVar.Shape().AppendShape({1, numSamples});
+        std::vector<float> errData(errShape.TotalSize());
+        NDArrayViewPtr cpuArrayErr = MakeSharedObject<NDArrayView>(errShape, errData.data(), errData.size(), DeviceDescriptor::CPUDevice(), false);
+        cpuArrayErr->CopyFrom(*errValue->Data());
+
+        fprintf(stderr, "Evaluation result:\n");
+        for (size_t i = 0; i < outputData.size(); i++)
+        {
+            fprintf(stderr, "Sample %lu, Output=%f, Error=%f\n", i, outputData[i], errData[i]);
+        }
     }
 
     /*
